@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>ModificaUtenteA</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<style type="text/css">
+#selectProfessione{
+margin-bottom: 20px;
+}
+div{
+margin-left: 20px;
+}
+</style>
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		Sezione ADMIN
+		<h2>Modifica Cliente</h2>
+		<hr />
+	 	<form th:action="@{/client/update}" th:object="${client}"
+			method="POST">
+			Ragione Sociale<input type="text" th:field="*{businessName}" 
+				class="form-control col-4 mb-4" required /> 
+		 		Email<input type="text" th:field="*{email}"  class="form-control col-4 mb-4" required /> 
+				Pec<input type="text" th:field="*{pec}"  class="form-control col-4 mb-4" required /> 
+				Telefono<input type="number" th:field="*{phone}"  class="form-control col-4 mb-4" required /> 
+				Tipo<br><select th:field="*{businessType.businessType}" >
+					<option
+						th:each="businessType : ${businessTypeList}"
+						th:value="${businessType.businessType}" th:text="${businessType.businessType}">
+					</option>
+				</select> <br>
+				<h2>Sede legale</h2>
+				Comune<input type="text" th:field="*{registeredOffice.city.name}"  class="form-control col-4 mb-4" required /> 
+				CAP<input type="number" th:field="*{registeredOffice.postalCode}"  class="form-control col-4 mb-4" />
+				Località<input type="text" th:field="*{registeredOffice.locality}"  class="form-control col-4 mb-4" />
+		 		Via<input type="text" th:field="*{registeredOffice.adress}"  class="form-control col-4 mb-4" />
+				Numero civico<input type="text" th:field="*{registeredOffice.streetNumber}"  class="form-control col-4 mb-4" />
+ 				<div th:if="${operationalHeadquarters}">
+ 				<h2>Sede operativa</h2>
+				Comune<input type="text" th:field="*{operationalHeadquarters.city.name}"  class="form-control col-4 mb-4" required /> 
+				CAP<input type="number" th:field="*{operationalHeadquarters.postalCode}"  class="form-control col-4 mb-4" />
+				Località<input type="text" th:field="*{operationalHeadquarters.locality}"  class="form-control col-4 mb-4" />
+		 		Via<input type="text" th:field="*{operationalHeadquarters.adress}"  class="form-control col-4 mb-4" />
+				Numero civico<input type="text" th:field="*{operationalHeadquarters.streetNumber}"  class="form-control col-4 mb-4" />
+ 				</div>
+ 				<h2>Contatti</h2>
+ 				Nome<input type="text" th:field="*{contact.contactName}" 
+				class="form-control col-4 mb-4" required /> 
+		 		Cognome<input type="text" th:field="*{contact.contactSurname}"  class="form-control col-4 mb-4" required /> 
+				Email<input type="text" th:field="*{contact.contactEmail}"  class="form-control col-4 mb-4" required /> 
+				Telefono<input type="number" th:field="*{contact.contactPhone}"  class="form-control col-4 mb-4" required /> 
+	 <a th:href="@{/client/list}">	<button class="btn btn-primary" type="submit">Salva modifiche</button></a> 
+			<input type="hidden" th:field="*{id}" /> 
+		</form>
+		<hr>
+		<a th:href="@{/client/list}">Ritorna alla Lista</a> 
+	</div>
+	</body>
+</html>

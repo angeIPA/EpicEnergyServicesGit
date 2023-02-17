@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Home Page</title>
+</head>
+<body>
+	<div align="center">
+		<div sec:authorize="hasRole('ROLE_ADMIN')">
+			<h2>Sezione ADMIN</h2>
+			Admin : <span th:text="${utente.name}"></span> <span
+				th:text="${utente.surname}"></span>
+		</div>
+
+		<div sec:authorize="hasRole('ROLE_USER')">
+			<h2>Sezione ADMIN</h2>
+			User : <span th:text="${utente.name}"></span> <span
+				th:text="${utente.surname}"></span>
+		</div>
+
+
+		<p>
+			<a href="/client/list" id="punti"> Lista clienti </a>
+
+		</p>
+		<p>
+			<a href="/client/orderByLastContact" id="punti"> Ordina per
+				ultimo contatto </a>
+		</p>
+
+		<form action="/invoice/getAmountByYear" method="get">
+					<label id="punti">Cerca importo annuale per anno</label>: <br /> <input
+						type="number" name="year" placeholder="year" /> <input
+						type="submit" value="cerca" />
+				</form> 
+
+
+		<div sec:authorize="hasRole('ROLE_ADMIN')">
+
+			<p>
+				<a href="" id="punti"> Aggiungi cliente </a>
+			</p>
+			<p>
+				<a href="" id="punti"> Modifica cliente cerca per id o parte
+					nome </a>
+			</p>
+			<p>
+				<a href="" id="punti"> elimina cliente cerca per id o parte nome
+				</a>
+			</p>
+
+
+		</div>
+	</div>
+</body>
+</html>

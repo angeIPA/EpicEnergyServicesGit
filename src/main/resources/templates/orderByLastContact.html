@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Home Page</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+	
+		<h1>Benvenuto</h1>
+	
+		
+		<h1>Lista ordine ultimo contatto</h1>
+
+		<table border="1" class="table-striped table-responsive-md">
+			<thead>
+				<tr>
+					<th scope="col">Ragione Sociale</th>
+					<th scope="col">Ultimo contatto</th>
+
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="client : ${clientList}">
+					<td th:text="${client.key}"></td>
+					<td th:text="${#dates.format(client.value, 'yyyy-MM-dd -- HH:mm:ss')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

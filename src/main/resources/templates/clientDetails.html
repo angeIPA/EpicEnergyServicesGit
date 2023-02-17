@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Menu principale</title>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.3/datatables.min.css" />
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+
+<meta charset="utf-8" />
+<link rel="stylesheet" href="css/main.css" th:href="@{/css/main.css}" />
+<style>
+h2 {
+	color: black;
+}
+
+table {
+	table-layout: fixed;
+	width: 500px;
+	border-collapse: collapse;
+	border: 1px solid #000;
+	background-color: #ccc;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+tr {
+	background-color: #ddd;
+	border-color: 1px solid #000;
+}
+
+thead th {
+	width: 30%;
+	border-color: 1px solid #000;
+}
+
+a {
+	text-decoration: none;
+}
+
+body {
+	text-align: center;
+}
+
+td {
+	padding: 10px;
+	background-color: #eee;
+	border-color: 1px solid #000;
+	text-align: center;
+}
+
+th {
+	padding: 10px;
+	background-color: #ddd;
+	border: 1px solid #000;
+	color: red;
+}
+
+form {
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">Sezione ADMIN
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		
+			<a th:href="@{/client/updateForm/{clientId}(clientId=${client.id})}"
+				class="btn btn-warning">modifica</a>
+	
+	<!-- 	<form action="/client/delete" method="post">
+			<a th:href="@{delete(id=${client.clientIid})}"
+				class="btn btn-danger ml-2">elimina</a>
+		</form> -->
+	
+	</div>
+	<div sec:authorize="hasRole('ROLE_USER')">Sezione USER</div>
+	<div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+		<h1>Dettagli</h1>
+		<table>
+			<tr>
+				<th>Ragione Sociale</th>
+				<td th:text="${client.businessName}"></td>
+			</tr>
+			<tr>
+				<th>Tipo</th>
+				<td th:text="${client.businessType.businessType}"></td>
+			</tr>
+			<tr>
+				<th>Partita IVA</th>
+				<td th:text="${client.partitaIva}"></td>
+			</tr>
+			<tr>
+				<th>Posta certificata</th>
+				<td th:text="${client.pec}"></td>
+			</tr>
+			<tr>
+				<th>Telefono</th>
+				<td th:text="${client.phone}"></td>
+			</tr>
+				<tr>
+				<th>Data registrazione</th>
+				<td th:text="${#dates.format(client.createdAt, 'yyyy-MM-dd -- HH:mm:ss')}"></td>
+			</tr>
+		</table>
+
+
+		<h1>Sede Legale</h1>
+		<table>
+			<tr>
+				<th>Provincia</th>
+				<td th:text="${client.registeredOffice.city.province.name}"></td>
+			</tr>
+			<tr>
+				<th>Comune</th>
+				<td th:text="${client.registeredOffice.city.name}"></td>
+			</tr>
+			<tr>
+				<th>CAP</th>
+				<td th:text="${client.registeredOffice.postalCode}"></td>
+			</tr>
+			<tr>
+				<th>Via</th>
+				<td th:text="${client.registeredOffice.adress}"></td>
+			</tr>
+
+
+		</table>
+
+		<div th:if="${operationalHeadquarters}">
+		<h1>Sede Operativa</h1>
+		<table>
+			<tr>
+				<th>Provincia</th>
+				<td th:text="${operationalHeadquarters.city.province.name}"></td>
+			</tr>
+			<tr>
+				<th>Comune</th>
+				<td th:text="${operationalHeadquarters.city.name}"></td>
+			</tr>
+			<tr>
+				<th>CAP</th>
+				<td th:text="${operationalHeadquarters.postalCode}"></td>
+			</tr>
+			<tr>
+				<th>Via</th>
+				<td th:text="${operationalHeadquarters.adress}"></td>
+			</tr>
+		</table>
+		</div>
+				<h1>Contatto</h1>
+		<table>
+			<tr>
+				<th>Nome</th>
+				<td th:text="${client.contact.contactName}"></td>
+			</tr>
+			<tr>
+				<th>Cognome</th>
+				<td th:text="${client.contact.contactSurname}"></td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td th:text="${client.contact.contactEmail}"></td>
+			</tr>
+			<tr>
+				<th>Telefono</th>
+				<td th:text="${client.contact.contactPhone}"></td>
+			</tr>
+		</table>
+		
+		
+		
+		
+		
+		</div>
+	</div>
+	<!-- 	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<form action="/utente/modificaUtenteA" method="post">
+			<a th:href="@{modificaUtenteA(id=${utente.id})}"
+				class="btn btn-warning">modifica</a>
+		</form>
+		<form action="/utente/eliminaUtenteA" method="post">
+			<a th:href="@{eliminaUtenteA(id=${utente.id})}"
+				class="btn btn-danger ml-2">elimina</a>
+		</form>
+				<form action="/notaPrivata/leggiNotePerUtenteA" method="get">
+				<a th:href="@{leggiNotePerUtenteA(id=${utente.id})}"
+					class="btn btn-dark">note</a>
+					</form>
+					
+	</div> -->
+</body>
+</html>

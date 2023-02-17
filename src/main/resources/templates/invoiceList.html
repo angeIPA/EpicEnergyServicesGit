@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Lista Clienti</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+
+		<h1>Benvenuto</h1>
+		<h1>Lista Fatture</h1>
+		<div>
+			<table border="1" class="table-striped table-responsive-md">
+				<thead>
+					<tr>
+						<th scope="col">Numero</th>
+						<th scope="col">Importo</th>
+						<th scope="col">Stato</th>
+						<th scope="col">Data</th>
+						<div sec:authorize="hasRole('ROLE_ADMIN')"><th scope="col">Modifica</th>
+						<th scope="col">Elimina</th></div>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="invoice : ${invoiceList}">
+						<td th:text="${invoice.number}"></td>
+						<td th:text="${invoice.amount}"></td>
+						<td th:text="${invoice.invoiceStatus.invoiceStatus}">
+						<td th:text="${#dates.format(invoice.createdAt, 'yyyy-MM-dd -- HH:mm:ss')}"></td>
+						<div sec:authorize="hasRole('ROLE_ADMIN')"><td><a
+							th:href="@{/invoice/updateForm/{invoiceId}(invoiceId=${invoice.id})}"
+							class="btn btn-info">modifica</a></td>
+						<td><a
+							th:href="@{/invoice/delete/{number}/{clientId}(number=${invoice.number}, clientId=${invoice.client.id})}"
+							class="btn btn-info">elimina</a></td></div>
+					</tr>
+				</tbody>
+			</table>
+
+			<!--barra con i numeri delle pagine  -->
+			<div th:if="${totalPages > 1}">
+				<div class="row col-sm-10">
+					<!-- riga -->
+					<div class="col-sm-2">
+						<!-- divisione delle colonne indica la dimensione? prima parte indico numero totale di elementi presenti-->
+						Total Rows: [[${totalElements}]]
+					</div>
+					<div class="col-sm-1">
+						<!-- divisione delle colonne .number.sequence qui creo colonne finchè la pagina corrente non raggiunge il valore e che ho impostato come valore massimo-->
+						<span th:each="i : ${#numbers.sequence(1, totalPages)}"> <a
+							th:if="${currentPage != i }"
+							th:href="@{'/client/page/'+ ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+							<span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+							&nbsp;
+						</span>
+					</div>
+					<div class="col-sm-1">
+						<a th:if="${currentPage < totalPages}"
+							th:href="@{'/client/page/' + ${currentPage + 1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+						<span th:unless="${currentPage < totalPages}">Next</span>
+					</div>
+					<div class="col-sm-1">
+						<!-- divisione delle colonne . scritta next per passare alla prossima pagina-->
+						<a th:if="${currentPage < totalPages}"
+							th:href="@{'/page/' + ${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+						<span th:unless="${currentPage < totalPages}">Last</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

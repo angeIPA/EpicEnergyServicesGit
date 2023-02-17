@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Lista Clienti</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')">
+
+		<h1>Benvenuto</h1>
+		<h1>Lista Clienti</h1>
+		<table border="1" class="table-striped table-responsive-md">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col"><a
+						th:href="@{'/client/page/'+ ${currentPage} + '?sortField=businessName&sortDir=' +
+					${reverseSortDir}}">Ragione
+							Sociale</a></th>
+					<th scope="col"><a
+						th:href="@{'/client/page/'+ ${currentPage} + '?sortField=registeredOffice.city.province.name&sortDir=' +
+					${reverseSortDir}}">Provincia</a></th>
+					<th scope="col"><a
+						th:href="@{'/client/page/'+ ${currentPage} + '?sortField=createdAt&sortDir=' +
+					${reverseSortDir}}">Data
+							registrazione</a></th>
+					<th scope="col">Dettagli</th>
+					<th scope="col">Fatture</th>
+					<div sec:authorize="hasRole('ROLE_ADMIN')"> <th scope="col">Nuova Fattura</th></div>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="client : ${listClient}">
+					<td th:text="${client.id}"></td>
+					<td th:text="${client.businessName}"></td>
+					<td th:text="${client.registeredOffice.city.province.name}">
+					<td th:text="${#dates.format(client.createdAt, 'yyyy-MM-dd -- HH:mm:ss')}"></td>
+					<td><a
+						th:href="@{/client/clientDetails/{clientId}(clientId=${client.id})}"
+						class="btn btn-info">dettagli</a></td>
+					<td><a
+						th:href="@{/invoice/findByClient/{clientId}(clientId=${client.id})}"
+						class="btn btn-info">fatture</a></td>
+					<div sec:authorize="hasRole('ROLE_ADMIN')"> <td><a th:href="@{/invoice/newInvoiceForm/{clientId}(clientId=${client.id})}"
+						class="btn btn-info">Nuova Fattura</a></td></div>
+				</tr>
+			</tbody>
+		</table>
+
+		<!--barra con i numeri delle pagine  -->
+		<div th:if="${totalPages > 1}">
+			<div class="row col-sm-10">
+				<!-- riga -->
+				<div class="col-sm-2">
+					<!-- divisione delle colonne indica la dimensione? prima parte indico numero totale di elementi presenti-->
+					Total Rows: [[${totalElements}]]
+				</div>
+				<div class="col-sm-1">
+					<!-- divisione delle colonne .number.sequence qui creo colonne finchè la pagina corrente non raggiunge il valore e che ho impostato come valore massimo-->
+					<span th:each="i : ${#numbers.sequence(1, totalPages)}"> <a
+						th:if="${currentPage != i }"
+						th:href="@{'/client/page/'+ ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+						&nbsp;
+					</span>
+				</div>
+				<div class="col-sm-1">
+					<a th:if="${currentPage < totalPages}"
+						th:href="@{'/client/page/' + ${currentPage + 1}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+					<span th:unless="${currentPage < totalPages}">Next</span>
+				</div>
+				<div class="col-sm-1">
+					<!-- divisione delle colonne . scritta next per passare alla prossima pagina-->
+					<a th:if="${currentPage < totalPages}"
+						th:href="@{'/page/' + ${totalPages}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+					<span th:unless="${currentPage < totalPages}">Last</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

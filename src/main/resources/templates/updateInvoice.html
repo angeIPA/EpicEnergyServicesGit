@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>ModificaUtenteA</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<style type="text/css">
+#selectProfessione{
+margin-bottom: 20px;
+}
+div{
+margin-left: 20px;
+}
+</style>
+</head>
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		Sezione ADMIN
+		<h2>Modifica Fattura</h2>
+		<hr />
+	 	<form th:action="@{/invoice/update}" th:object="${invoice}"
+			method="POST">
+			Numero<input type="text" th:field="*{number}" 
+				class="form-control col-4 mb-4" required /> 
+		 		Importo<input type="number" th:field="*{amount}"  class="form-control col-4 mb-4" required /> 
+				Stato<br><select th:field="*{invoiceStatus.invoiceStatus}" >
+					<option
+						th:each="invoiceStatus : ${invoiceStatus}"
+						th:value="${invoiceStatus.invoiceStatus}" th:text="${invoiceStatus.invoiceStatus}">
+					</option>
+				</select> <br>
+	 <button class="btn btn-primary" type="submit">Salva modifiche</button>
+			<input type="hidden" th:field="*{id}" /> 
+			<input type="hidden" th:field="*{client.id}" />
+		</form>
+		<hr>
+		<a th:href="@{/client/list}">Ritorna alla Lista</a> 
+	</div>
+	</body>
+</html>
