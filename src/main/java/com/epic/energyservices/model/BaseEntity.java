@@ -22,6 +22,8 @@ public class BaseEntity {
 	
 	
 	//commento git
+	//commento git
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
