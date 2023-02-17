@@ -20,10 +20,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BaseEntity {
 	
-	//commento per modifica git 
-
-	//secondo commento git
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
