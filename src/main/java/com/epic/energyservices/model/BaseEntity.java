@@ -22,10 +22,11 @@ public class BaseEntity {
 	
 	//commento per modifica git 
 
+	//secondo commento git
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
 	@Column( //
 			columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", //
 			insertable = false, //
