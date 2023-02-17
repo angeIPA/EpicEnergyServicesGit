@@ -23,7 +23,7 @@ public class BaseEntity {
 	//commento per modifica git 
 
 	//secondo commento git
-	
+	//ciao
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
